@@ -19,3 +19,9 @@
   - ターミナル
 - 検索のやり方
   - `スペース区切り` で３つまで検索ワードを入力する
+
+## 2. 自ノードのファイルを検索
+- 検索場所
+  - filesフォルダ
+- 検索方法
+  - [filePath.walkで検索を行う](https://golang.hateblo.jp/entry/golang-file-search-program-for-beginner)
