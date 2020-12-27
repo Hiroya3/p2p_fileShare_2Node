@@ -25,6 +25,7 @@
   - filesフォルダ
 - 検索方法
   - [filePath.walkで検索を行う](https://golang.hateblo.jp/entry/golang-file-search-program-for-beginner)
+  - 検索結果がない→ `検索結果し` と表示
 
 ## 3. 相手ノードへの検索クエリの実行
 - 検索方法
