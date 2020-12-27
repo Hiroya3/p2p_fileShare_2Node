@@ -25,3 +25,8 @@
   - filesフォルダ
 - 検索方法
   - [filePath.walkで検索を行う](https://golang.hateblo.jp/entry/golang-file-search-program-for-beginner)
+
+## 3. 相手ノードへの検索クエリの実行
+- 検索方法
+  - ソケット通信を使った検索クエリの発行（リクエストボディに検索条件を詰め込む）：TCP通信の実装
+  - 参考：[GoでたたくTCPソケット（前編）](https://ascii.jp/elem/000/001/276/1276572/)
