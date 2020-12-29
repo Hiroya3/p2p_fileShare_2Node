@@ -1,5 +1,7 @@
 package main
 
+//go.modでローカルをインポートするにはgomodのリプレイスを使用する
+//https://qiita.com/hnishi/items/a9217249d7832ed2c035
 import "local.packages/server"
 
 func main() {
