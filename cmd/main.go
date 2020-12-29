@@ -1,5 +1,7 @@
 package main
 
+import "local.packages/server"
+
 func main() {
 	/*
 	* 処理の流れ
@@ -7,4 +9,6 @@ func main() {
 	* 2. 自ノードのコマンドラインにファイルの文言を表示
 	 */
 
+	//サーバーの開始
+	server.StartServer()
 }
