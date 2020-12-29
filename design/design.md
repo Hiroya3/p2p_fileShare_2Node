@@ -6,12 +6,17 @@
 
 # フォルダ構成
 - /cmd : main.goなどのエントリポイント
+  - main.go
 - /client : クライアントサイド
   - /query : クエリ検索用
+    - query.go
   - /download : ファイルのダウンロード
+    - download.go
 - /server : サーバーサイド
   - /search : 自ノードファイル検索
+    - search.go
   - /upload : 指定されたファイルのアップロード（クライアントのdownload用）
+    - upload.go
 
 # 動作
 1. ユーザーが欲しいファイルのキーワードを検索
