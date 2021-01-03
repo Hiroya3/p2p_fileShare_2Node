@@ -2,6 +2,7 @@ package main
 
 import (
 	"p2p_fileShare_2Node/client"
+	"p2p_fileShare_2Node/server"
 )
 
 func main() {
@@ -12,7 +13,7 @@ func main() {
 	 */
 
 	//サーバーの開始
-	//go server.StartServer()
+	go server.StartServer()
 
 	client.ViewCmd()
 }

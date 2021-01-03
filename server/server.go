@@ -1,10 +1,13 @@
 package server
 
 import (
+	"bufio"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
+	"net/http/httputil"
 	"strings"
 )
 
@@ -24,7 +27,18 @@ func StartServer() {
 			log.Fatalln(err)
 		}
 		go func() {
-			//レスポンスを書き込む
+			// リクエストを読み込む
+			request, err := http.ReadRequest(
+				bufio.NewReader(conn))
+			if err != nil {
+				panic(err)
+			}
+			dump, err := httputil.DumpRequest(request, true)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(string(dump))
+			// レスポンスを書き込む
 			response := http.Response{
 				StatusCode: 200,
 				ProtoMajor: 1,
