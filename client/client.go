@@ -14,7 +14,7 @@ var SearchingWords []string
 func ViewCmd() {
 	for {
 		fmt.Println("ファイルを検索します。キーワードをスペース区切りで3つまで指定してください。\n３つ以上指定した場合ははじめ３つが採用されます。")
-		SearchingWords = getSearchingWords(os.Stdin)
+		SearchingWords = getSearchingWordsBySpace(os.Stdin)
 
 		if len(SearchingWords) > 3 {
 			fmt.Println("4つ以上指定されたため、はじめの３つを取得します。")
@@ -31,7 +31,7 @@ func ViewCmd() {
 
 //標準入力されたワードをスペース区切りで取得し、スライスに格納します
 //unitテストを可能にするために引数にio.Readerを用いる
-func getSearchingWords(stdin io.Reader) []string {
+func getSearchingWordsBySpace(stdin io.Reader) []string {
 	var searchingWords = []string{}
 
 	sc := bufio.NewScanner(stdin)

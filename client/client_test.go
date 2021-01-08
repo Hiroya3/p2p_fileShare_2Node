@@ -6,48 +6,25 @@ import (
 	"testing"
 )
 
-func TestGetSearchingWords(t *testing.T) {
+func TestgetSearchingWordsBySpace(t *testing.T) {
 	//参考：https://petersouter.xyz/testing-and-mocking-stdin-in-golang/
-	var stdin_0word, stdin_1word, stdin_3words, stdin_4words bytes.Buffer
+	var stdin_non_word, stdin_words bytes.Buffer
 
-	expect_1word := []string{"aaa"}
-	expect_3words := []string{"aaa", "bbb", "ccc"}
-	expect_4words := []string{"aaa", "bbb", "ccc"}
+	expect_words := []string{"aaa", "bbb", "ccc", "ddd"}
 
-	stdin_0word.Write([]byte("\n"))
-	stdin_1word.Write([]byte("aaa\n"))
-	stdin_3words.Write([]byte("aaa bbb ccc\n"))
-	stdin_4words.Write([]byte("aaa bbb ccc ddd\n"))
+	stdin_non_word.Write([]byte("\n"))
+	stdin_words.Write([]byte(" aaa  bbb　ccc	ddd   \n"))
 
-	result_0word := client.T_GetSearchingWords(&stdin_0word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
-	result_1word := client.T_GetSearchingWords(&stdin_1word)
-	result_3words := client.T_GetSearchingWords(&stdin_3words)
-	result_4words := client.T_GetSearchingWords(&stdin_4words)
+	result_0word := client.T_getSearchingWordsBySpace(&stdin_non_word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
+	result_words := client.T_getSearchingWordsBySpace(&stdin_words)
 
 	if len(result_0word) != 0 {
 		t.Errorf("length is more than 0. got:%s", result_0word)
 	}
 
-	for i := 0; i < len(result_1word); i++ {
-		if expect_1word[i] != result_1word[i] {
-			t.Errorf("got: %s, expect_3wordsed: %s", result_1word[i], expect_1word[i])
-		}
-	}
-
-	for i := 0; i < len(result_3words); i++ {
-		if expect_3words[i] != result_3words[i] {
-			t.Errorf("got: %s, expect_3wordsed: %s", result_3words[i], expect_3words[i])
-		}
-	}
-
-	for i := 0; i < len(result_4words); i++ {
-		if i < 3 {
-			if expect_4words[i] != result_4words[i] {
-				t.Errorf("got: %s, expect_3wordsed: %s", result_4words[i], expect_4words[i])
-			}
-		} else {
-			//３つまでしか取得できないので超えた分は無視
-			break
+	for i := 0; i < len(result_words); i++ {
+		if expect_words[i] != result_words[i] {
+			t.Errorf("got: %s, expect_words: %s", result_words[i], expect_words[i])
 		}
 	}
 }
