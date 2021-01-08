@@ -15,11 +15,11 @@ func TestgetSearchingWordsBySpace(t *testing.T) {
 	stdin_non_word.Write([]byte("\n"))
 	stdin_words.Write([]byte(" aaa  bbb　ccc	ddd   \n"))
 
-	result_0word := client.T_getSearchingWordsBySpace(&stdin_non_word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
+	result_non_word := client.T_getSearchingWordsBySpace(&stdin_non_word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
 	result_words := client.T_getSearchingWordsBySpace(&stdin_words)
 
-	if len(result_0word) != 0 {
-		t.Errorf("length is more than 0. got:%s", result_0word)
+	if len(result_non_word) != 0 {
+		t.Errorf("length is more than 0. got:%s", result_non_word)
 	}
 
 	for i := 0; i < len(result_words); i++ {
