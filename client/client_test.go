@@ -7,6 +7,7 @@ import (
 )
 
 func TestGetSearchingWords(t *testing.T) {
+	//参考：https://petersouter.xyz/testing-and-mocking-stdin-in-golang/
 	var stdin_0word, stdin_1word, stdin_3words, stdin_4words bytes.Buffer
 
 	expect_1word := []string{"aaa"}
