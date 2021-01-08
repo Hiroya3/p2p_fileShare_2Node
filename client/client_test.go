@@ -19,7 +19,7 @@ func TestGetSearchingWords(t *testing.T) {
 	stdin_3words.Write([]byte("aaa bbb ccc\n"))
 	stdin_4words.Write([]byte("aaa bbb ccc ddd\n"))
 
-	result_0word := client.T_GetSearchingWords(&stdin_0word)
+	result_0word := client.T_GetSearchingWords(&stdin_0word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
 	result_1word := client.T_GetSearchingWords(&stdin_1word)
 	result_3words := client.T_GetSearchingWords(&stdin_3words)
 	result_4words := client.T_GetSearchingWords(&stdin_4words)
