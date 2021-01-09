@@ -1,8 +1,9 @@
-package client
+package query
 
 import (
 	"log"
 	"net"
+	"p2p_fileShare_2Node/client"
 )
 
 //検索の実行
@@ -14,10 +15,19 @@ func Query() {
 	}
 
 	defer connection.Close()
-	sendQuery(connection)
+	makeQuery(connection, client.SearchingWords)
 }
 
 //connetionにqueryを書き込む
-func sendQuery(connection net.Conn) {
+func makeQuery(connection net.Conn, searchingWords []string) {
+	if len(searchingWords) == 0 {
+		log.Fatalln("キーワードを指定してください")
+	}
 
+	for i := 0; i < len(searchingWords); i++ {
+		_, err := connection.Write([]byte(searchingWords[i] + "\n"))
+		if err != nil {
+			log.Fatalf("Connectionへの書き込みでエラーが発生しました。\nerror:%s", err)
+		}
+	}
 }
