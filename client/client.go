@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+//検索ワードの格納
 var SearchingWords []string
 
 //コマンドラインに案内画面を表示します。
