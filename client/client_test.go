@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestgetSearchingWordsBySpace(t *testing.T) {
+func TestGetSearchingWordsBySpace(t *testing.T) {
 	//参考：https://petersouter.xyz/testing-and-mocking-stdin-in-golang/
 	var stdin_non_word, stdin_words bytes.Buffer
 
