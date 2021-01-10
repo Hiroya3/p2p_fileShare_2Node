@@ -1,14 +1,10 @@
 package server
 
 import (
-	"bufio"
-	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net"
-	"net/http"
-	"net/http/httputil"
-	"strings"
+	"time"
 )
 
 func StartServer() {
@@ -23,30 +19,28 @@ func StartServer() {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Println("listenerのacceptでエラーが発生しました")
-			log.Fatalln(err)
+			log.Println("listenerのacceptでエラーが発生しました。err:%s", err)
 		}
 		go func() {
+			defer conn.Close()
 			// リクエストを読み込む
-			request, err := http.ReadRequest(
-				bufio.NewReader(conn))
-			if err != nil {
-				panic(err)
-			}
-			dump, err := httputil.DumpRequest(request, true)
-			if err != nil {
-				panic(err)
-			}
-			fmt.Println(string(dump))
-			// レスポンスを書き込む
-			response := http.Response{
-				StatusCode: 200,
-				ProtoMajor: 1,
-				ProtoMinor: 0,
-				Body:       ioutil.NopCloser(strings.NewReader("Hello World\n")),
-			}
-			response.Write(conn)
-			conn.Close()
+			messageBuff, messageLen := readRequestMessage(conn)
 		}()
 	}
+}
+
+//リクエストを読み込む
+func readRequestMessage(conn net.Conn) ([]byte, int) {
+	messageBuff := make([]byte, 1024)
+
+	conn.SetReadDeadline(time.Now().Add(10 * time.Second))
+	messageLen, err := conn.Read(messageBuff)
+	if err != nil {
+		if err == io.EOF {
+			//クライアント側から切断された時
+			return []byte{}, 0
+		}
+		log.Fatalf("リクエストの読み込みに失敗しました。err:%s", err)
+	}
+	return messageBuff, messageLen
 }
