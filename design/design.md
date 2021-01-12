@@ -60,8 +60,10 @@
 -  `ダウンロード完了` の文言とともにファイルパスを表示
 
 # アーキテクチャ
-2つのDockerを立ち上げてDocker間で通信。
+2つのDockerを立ち上げてDocker間で通信。<br>
 参考：[docker/docker-composeにおけるコンテナ間通信を実装する](https://dragon-taro.com/technology/post-556#outline__6)
+
+## Docker情報
 
 - Docker1
   - name : node1
@@ -70,3 +72,9 @@
 - Docker2
   - name : node2
   - port : 80:80
+
+## ノード情報取得方法
+address.jsonを用意し、初回通信時に読み込む。
+- ファイル内容
+  - 自分のノード情報
+  - 相手のノード情報
