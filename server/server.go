@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -25,6 +26,8 @@ func StartServer() {
 			defer conn.Close()
 			// リクエストを読み込む
 			messageBuff, messageLen := readRequestMessage(conn)
+			fmt.Println(messageBuff)
+			fmt.Println(messageLen)
 		}()
 	}
 }
