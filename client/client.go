@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 )
 
@@ -15,7 +14,8 @@ var SearchingWords []string
 func ViewCmd() {
 	for {
 		fmt.Println("ファイルを検索します。キーワードをスペース区切りで3つまで指定してください。\n３つ以上指定した場合ははじめ３つが採用されます。")
-		SearchingWords = getSearchingWordsBySpace(os.Stdin)
+		//SearchingWords = getSearchingWordsBySpace(os.Stdin)
+		SearchingWords = []string{"aa", "bb", "cc"}
 
 		if len(SearchingWords) > 3 {
 			fmt.Println("4つ以上指定されたため、はじめの３つを取得します。")
