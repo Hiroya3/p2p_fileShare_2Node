@@ -61,7 +61,12 @@
 
 # アーキテクチャ
 2つのDockerを立ち上げてDocker間で通信。
+参考：[docker/docker-composeにおけるコンテナ間通信を実装する](https://dragon-taro.com/technology/post-556#outline__6)
 
-Docker1のポート：192.162.24.100:8080
+- Docker1
+  - name : node1
+  - port : 8080:8080
 
-Docker2のポート：192.162.24.200:8080
+- Docker2
+  - name : node2
+  - port : 80:80
