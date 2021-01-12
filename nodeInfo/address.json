@@ -2,5 +2,5 @@
     "ownDNS":"localhost",
     "ownPort":"8080",
     "targetDNS":"localhost",
-    "targetPort":"8000"
+    "targetPort":"8080"
 }

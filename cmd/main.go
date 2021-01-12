@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"p2p_fileShare_2Node/client"
@@ -43,4 +44,8 @@ func main() {
 	go server.StartServer(Address.OwnDNS, Address.OwnPort)
 
 	client.ViewCmd()
+	fmt.Println("connに書き込みを行います")
+	client.Query(Address.TargetDNS, Address.TargetPort)
+	for {
+	}
 }
