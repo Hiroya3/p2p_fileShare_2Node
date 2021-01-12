@@ -1,0 +1,10 @@
+{
+  "ownNode":{
+    "dns":"testDNS",
+    "port":80
+  },
+  "targetNode":{
+    "dns":"targetDNS",
+    "port":8080
+  }
+}
