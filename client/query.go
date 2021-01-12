@@ -6,8 +6,8 @@ import (
 )
 
 //検索の実行
-func Query() {
-	connection, err := net.Dial("tcp", "localhost:10000")
+func Query(address, port string) {
+	connection, err := net.Dial("tcp", address+":"+port)
 
 	if err != nil {
 		log.Fatalf("query error!!! error:%s", err)

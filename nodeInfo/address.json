@@ -1,6 +1,6 @@
 {
-    "ownDNS":"testDNS",
-    "ownPort":80,
-    "targetDNS":"targetDNS",
-    "targetPort":8080
+    "ownDNS":"localhost",
+    "ownPort":"8080",
+    "targetDNS":"localhost",
+    "targetPort":"8000"
 }

@@ -5,13 +5,12 @@ import (
 	"io"
 	"log"
 	"net"
-	"strconv"
 	"time"
 )
 
-func StartServer(port int) {
+func StartServer(address, port string) {
 	//listenの開始
-	listener, err := net.Listen("tcp", "localhost:"+strconv.Itoa(port))
+	listener, err := net.Listen("tcp", address+":"+port)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -27,8 +26,8 @@ func StartServer(port int) {
 			defer conn.Close()
 			// リクエストを読み込む
 			messageBuff, messageLen := readRequestMessage(conn)
-			fmt.Println(messageBuff)
-			fmt.Println(messageLen)
+			fmt.Println(string(messageBuff))
+			fmt.Println("byte列の長さは" + string(messageLen) + "です")
 		}()
 	}
 }

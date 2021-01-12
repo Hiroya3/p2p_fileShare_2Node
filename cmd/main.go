@@ -10,9 +10,9 @@ import (
 
 type address struct {
 	OwnDNS     string `json:"ownDNS"`
-	OwnPort    int    `json:"ownPort"`
+	OwnPort    string `json:"ownPort"`
 	TargetDNS  string `json:"targetDNS"`
-	TargetPort int    `json:"targetPort"`
+	TargetPort string `json:"targetPort"`
 }
 
 var Address address
@@ -40,7 +40,7 @@ func main() {
 	 */
 
 	//サーバーの開始
-	go server.StartServer(Address.OwnPort)
+	go server.StartServer(Address.OwnDNS, Address.OwnPort)
 
 	client.ViewCmd()
 }
