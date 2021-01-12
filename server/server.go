@@ -5,12 +5,13 @@ import (
 	"io"
 	"log"
 	"net"
+	"strconv"
 	"time"
 )
 
-func StartServer() {
+func StartServer(port int) {
 	//listenの開始
-	listener, err := net.Listen("tcp", "localhost:8080")
+	listener, err := net.Listen("tcp", "localhost:"+strconv.Itoa(port))
 	if err != nil {
 		log.Fatalln(err)
 	}

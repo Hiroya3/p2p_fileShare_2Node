@@ -40,7 +40,7 @@ func main() {
 	 */
 
 	//サーバーの開始
-	go server.StartServer()
+	go server.StartServer(Address.OwnPort)
 
 	client.ViewCmd()
 }
