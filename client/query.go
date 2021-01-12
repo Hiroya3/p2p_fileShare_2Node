@@ -1,9 +1,8 @@
-package query
+package client
 
 import (
 	"log"
 	"net"
-	"p2p_fileShare_2Node/client"
 )
 
 //検索の実行
@@ -15,7 +14,7 @@ func Query() {
 	}
 
 	defer connection.Close()
-	makeQuery(connection, client.SearchingWords)
+	makeQuery(connection, SearchingWords)
 }
 
 //connetionにqueryを書き込む
