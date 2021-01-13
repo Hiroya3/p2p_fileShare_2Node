@@ -38,6 +38,8 @@ func readRequestMessage(conn net.Conn) []string {
 	messageSlice := []string{}
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
+	//forのなかでreaderを作ると2回目以降のループでreaderが再度初期化され何も残らなくなる
+	//https://stackoverrun.com/ja/q/12701223
 	reader := bufio.NewReader(conn)
 	for {
 		message, err := reader.ReadString('\n')
