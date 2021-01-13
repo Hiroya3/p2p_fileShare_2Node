@@ -16,6 +16,7 @@ func StartServer(address, port string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	defer listener.Close()
 	log.Println("webサーバーを開始します")
 
 	//1回でlistenerが閉じてしまわないようにfor文かつgoroutineで回す
