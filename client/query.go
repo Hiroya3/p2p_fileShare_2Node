@@ -3,6 +3,7 @@ package client
 import (
 	"log"
 	"net"
+	"strings"
 )
 
 //検索の実行
@@ -23,10 +24,9 @@ func makeQuery(connection net.Conn, searchingWords []string) {
 		log.Fatalln("キーワードを指定してください")
 	}
 
-	for i := 0; i < len(searchingWords); i++ {
-		_, err := connection.Write([]byte(searchingWords[i] + "\n"))
-		if err != nil {
-			log.Fatalf("Connectionへの書き込みでエラーが発生しました。\nerror:%s", err)
-		}
+	//server側で改行で取得するため末尾にも改行コードを入れる
+	_, err := connection.Write([]byte(strings.Join(searchingWords, "\n") + "\n"))
+	if err != nil {
+		log.Fatalf("Connectionへの書き込みでエラーが発生しました。\nerror:%s", err)
 	}
 }

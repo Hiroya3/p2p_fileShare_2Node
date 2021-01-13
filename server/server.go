@@ -1,10 +1,12 @@
 package server
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -25,25 +27,30 @@ func StartServer(address, port string) {
 		go func() {
 			defer conn.Close()
 			// リクエストを読み込む
-			messageBuff, messageLen := readRequestMessage(conn)
-			fmt.Println(string(messageBuff))
-			fmt.Println("byte列の長さは" + string(messageLen) + "です")
+			messageSlice := readRequestMessage(conn)
+			fmt.Println(messageSlice)
 		}()
 	}
 }
 
 //リクエストを読み込む
-func readRequestMessage(conn net.Conn) ([]byte, int) {
-	messageBuff := make([]byte, 1024)
+func readRequestMessage(conn net.Conn) []string {
+	messageSlice := []string{}
 
-	conn.SetReadDeadline(time.Now().Add(1000 * time.Second))
-	messageLen, err := conn.Read(messageBuff)
-	if err != nil {
-		if err == io.EOF {
-			//クライアント側から切断された時
-			return []byte{}, 0
+	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
+	reader := bufio.NewReader(conn)
+	for {
+		message, err := reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				//最終行以降を読み込んだ際
+				break
+			}
+			log.Fatalf("リクエストの読み込みに失敗しました。err:%s", err)
 		}
-		log.Fatalf("リクエストの読み込みに失敗しました。err:%s", err)
+
+		message = strings.ReplaceAll(message, "\n", "")
+		messageSlice = append(messageSlice, message)
 	}
-	return messageBuff, messageLen
+	return messageSlice
 }
