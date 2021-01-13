@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
+	"os/signal"
 	"time"
 )
 
@@ -15,6 +17,10 @@ func StartServer(address, port string) {
 		log.Fatalln(err)
 	}
 	log.Println("webサーバーを開始します")
+
+	//Ctrl + Cで終了した時
+	interrupt := make(chan os.Signal)
+	signal.Notify(interrupt, os.Interrupt)
 
 	//1回でlistenerが閉じてしまわないようにfor文かつgoroutineで回す
 	for {
@@ -29,6 +35,11 @@ func StartServer(address, port string) {
 			fmt.Println(string(messageBuff))
 			fmt.Println("byte列の長さは" + string(messageLen) + "です")
 		}()
+
+		select {
+		case <-interrupt:
+			break
+		}
 	}
 }
 
