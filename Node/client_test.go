@@ -1,8 +1,7 @@
-package client_test
+package service_test
 
 import (
 	"bytes"
-	"p2p_fileShare_2Node/client"
 	"testing"
 )
 
@@ -15,8 +14,8 @@ func TestGetSearchingWordsBySpace(t *testing.T) {
 	stdin_non_word.Write([]byte("\n"))
 	stdin_words.Write([]byte(" aaa  bbb　ccc	ddd   \n"))
 
-	result_non_word := client.T_getSearchingWordsBySpace(&stdin_non_word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
-	result_words := client.T_getSearchingWordsBySpace(&stdin_words)
+	result_non_word := service.T_getSearchingWordsBySpace(&stdin_non_word) //byteのポインター型にするのはos.Stdinがfileのポインター型であり型を揃えるため
+	result_words := service.T_getSearchingWordsBySpace(&stdin_words)
 
 	if len(result_non_word) != 0 {
 		t.Errorf("length is more than 0. got:%s", result_non_word)
