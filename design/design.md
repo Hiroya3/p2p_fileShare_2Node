@@ -7,11 +7,11 @@
 - /cmd : main.goなどのエントリポイント
   - main.go
 - /Node
-  - [package service]内部のロジック
+  - /service : 内部のロジック
     - cmd.go : cmdでのやりとりと文言の取得
     - searchiFile.go : ファイルの検索
 
-  - [package p2p]ノード間同士のやりとり
+  - /p2p : ノード間同士のやりとり
     - socket.go : 検索とダウンロードのクエリ
 
 # 動作

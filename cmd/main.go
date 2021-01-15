@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"p2p_fileShare_2Node/client"
-	"p2p_fileShare_2Node/server"
+	"p2p_fileShare_2Node/Node/p2p"
+	"p2p_fileShare_2Node/Node/service"
 )
 
 type address struct {
@@ -41,11 +41,11 @@ func main() {
 	 */
 
 	//サーバーの開始
-	go server.StartServer(Address.OwnDNS, Address.OwnPort)
+	go p2p.Run(Address.OwnDNS, Address.OwnPort)
 
-	client.ViewCmd()
+	service.ViewCmd()
 	fmt.Println("connに書き込みを行います")
-	client.Query(Address.TargetDNS, Address.TargetPort)
+	p2p.Query(Address.TargetDNS, Address.TargetPort)
 	for {
 	}
 }

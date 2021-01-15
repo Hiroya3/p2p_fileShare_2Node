@@ -3,6 +3,8 @@ package service_test
 import (
 	"bytes"
 	"testing"
+
+	"p2p_fileShare_2Node/Node/service"
 )
 
 func TestGetSearchingWordsBySpace(t *testing.T) {
