@@ -45,7 +45,7 @@ func main() {
 
 	service.ViewCmd()
 	fmt.Println("connに書き込みを行います")
-	p2p.Query(Address.TargetDNS, Address.TargetPort)
+	p2p.SearchFile(Address.TargetDNS, Address.TargetPort)
 	for {
 	}
 }

@@ -58,8 +58,8 @@ func readRequestMessage(conn net.Conn) []string {
 	return messageSlice
 }
 
-//検索の実行
-func Query(address, port string) {
+//相手ノードへのファイル検索の実行
+func SearchFile(address, port string, searchingWords []string) {
 	connection, err := net.Dial("tcp", address+":"+port)
 
 	if err != nil {
@@ -67,7 +67,7 @@ func Query(address, port string) {
 	}
 
 	defer connection.Close()
-	makeQuery(connection, SearchingWords)
+	makeQuery(connection, searchingWords)
 }
 
 //connetionにqueryを書き込む
