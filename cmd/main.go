@@ -43,9 +43,9 @@ func main() {
 	//サーバーの開始
 	go p2p.Run(Address.OwnDNS, Address.OwnPort)
 
-	service.ViewCmd()
+	searchingWords := service.GetSearchingWords()
 	fmt.Println("connに書き込みを行います")
-	p2p.SearchFile(Address.TargetDNS, Address.TargetPort)
+	p2p.SearchFile(Address.TargetDNS, Address.TargetPort, searchingWords)
 	for {
 	}
 }
