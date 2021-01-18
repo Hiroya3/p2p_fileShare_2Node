@@ -78,9 +78,9 @@ address.jsonを用意し、初回通信時に読み込む。
 
 ## プロトコル
 [形式]
-`{identifical header}:{method}:{body}:{check sum};`
+`{identifical header}:{method}:{body}:{check sum}`
 
-`:` を区切り文字として、終わりは`;` とする。
+`:` を区切り文字とする。
 
 - identifical header
   - 001 : レスポンスが必要なクエリ（検索等）

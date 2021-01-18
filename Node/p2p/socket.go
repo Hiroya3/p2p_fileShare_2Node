@@ -86,7 +86,7 @@ func sendSearchWords(connection net.Conn, searchingWords []string) {
 
 	//requestBodyStrのハッシュ値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
-	requestStr := requestBodyStr + hex.EncodeToString(sum[:]) + ";"
+	requestStr := requestBodyStr + hex.EncodeToString(sum[:])
 
 	_, err := connection.Write([]byte(requestStr))
 	if err != nil {
