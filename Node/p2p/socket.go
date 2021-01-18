@@ -39,24 +39,22 @@ func Run(address, port string) {
 //リクエストを読み込む
 func readRequestMessage(conn net.Conn) []string {
 	messageSlice := []string{}
+	buff := make([]byte, 1024)
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
 	//forのなかでreaderを作ると2回目以降のループでreaderが再度初期化され何も残らなくなる
 	//https://stackoverrun.com/ja/q/12701223
 	reader := bufio.NewReader(conn)
-	for {
-		message, err := reader.ReadString('\n')
-		if err != nil {
-			if err == io.EOF {
-				//最終行以降を読み込んだ際
-				break
-			}
-			log.Fatalf("リクエストの読み込みに失敗しました。err:%s", err)
-		}
 
-		message = strings.ReplaceAll(message, "\n", "")
-		messageSlice = append(messageSlice, message)
+	_, err := reader.Read(buff)
+	if err != nil {
+		if err == io.EOF {
+			log.Fatalf("コネクションが閉じられました。\n エラー：%s", err)
+		} else {
+			log.Fatalf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
+		}
 	}
+
 	return messageSlice
 }
 
