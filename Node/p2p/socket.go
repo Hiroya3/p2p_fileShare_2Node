@@ -55,7 +55,24 @@ func readRequestMessage(conn net.Conn) []string {
 		}
 	}
 
+	//elementsがリクエストの要素
+	//elements[0] : 001
+	//elements[1] : method
+	//elements[2] : body
+	//elements[3] : sha256
+	elements := strings.Split(string(buff), ":")
+
+	//改竄がないかハッシュ値の比較
+	fmt.Println(compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]))
+
 	return messageSlice
+}
+
+func compareHash(requestStr, requestHash string) bool {
+	//hash値の計算
+	sum := sha256.Sum256([]byte(requestStr))
+
+	return hex.EncodeToString(sum[:]) == requestStr
 }
 
 //相手ノードへのファイル検索の実行
