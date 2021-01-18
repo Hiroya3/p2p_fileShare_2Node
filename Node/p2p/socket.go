@@ -2,6 +2,8 @@ package p2p
 
 import (
 	"bufio"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"log"
@@ -71,14 +73,25 @@ func SearchFile(address, port string, searchingWords []string) {
 }
 
 //connetionに検索ワードを書き込む
+//検索の場合は001:searchWords:[キーワード]:チェックサム（sha256）
 func sendSearchWords(connection net.Conn, searchingWords []string) {
 	if len(searchingWords) == 0 {
 		log.Fatalln("キーワードを指定してください")
 	}
 
-	//server側で改行で取得するため末尾にも改行コードを入れる
-	_, err := connection.Write([]byte(strings.Join(searchingWords, "\n") + "\n"))
+	var messageBui strings.Builder
+
+	messageBui.WriteString("001:searchWords:")
+	messageBui.WriteString(strings.Join(searchingWords, ",") + ":")
+
+	requestBodyStr := messageBui.String()
+
+	//requestBodyStrのハッシュ値の計算
+	sum := sha256.Sum256([]byte(requestBodyStr))
+	requestStr := requestBodyStr + hex.EncodeToString(sum[:]) + ";"
+
+	_, err := connection.Write([]byte(requestStr))
 	if err != nil {
-		log.Fatalf("Connectionへの書き込みでエラーが発生しました。\nerror:%s", err)
+		log.Fatalf("connectionへの書き込みに失敗しました。\nerr:%s", err)
 	}
 }
