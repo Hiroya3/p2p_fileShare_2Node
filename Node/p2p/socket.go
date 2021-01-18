@@ -67,11 +67,11 @@ func SearchFile(address, port string, searchingWords []string) {
 	}
 
 	defer connection.Close()
-	makeQuery(connection, searchingWords)
+	sendSearchWords(connection, searchingWords)
 }
 
-//connetionにqueryを書き込む
-func makeQuery(connection net.Conn, searchingWords []string) {
+//connetionに検索ワードを書き込む
+func sendSearchWords(connection net.Conn, searchingWords []string) {
 	if len(searchingWords) == 0 {
 		log.Fatalln("キーワードを指定してください")
 	}
