@@ -75,3 +75,17 @@ address.jsonを用意し、初回通信時に読み込む。
 - ファイル内容
   - 自分のノード情報
   - 相手のノード情報
+
+## プロトコル
+`{identifical header}{method}{body}{check sum}`
+
+- identifical header
+  - 001 : レスポンスが必要なクエリ（検索等）
+  - 002 : レスポンスが必要ないクエリ（伝搬等）
+- method
+  - search : ファイルの検索
+  - download : ファイルのダウンロード
+- body
+  - methodに応じたbody
+- check sum
+  - identifical header / method / bodyのリクエスト時のチェックサムで改竄がないかチェックする
