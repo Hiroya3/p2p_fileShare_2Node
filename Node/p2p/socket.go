@@ -57,7 +57,9 @@ func readRequestMessage(conn net.Conn) []string {
 	elements := strings.Split(buff.String(), ":")
 
 	//改竄がないかハッシュ値の比較
-	fmt.Println(compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]))
+	if !compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]) {
+		//TODO:connectionに改竄されたことを書き込む
+	}
 
 	return messageSlice
 }
