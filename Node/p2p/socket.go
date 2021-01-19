@@ -1,7 +1,7 @@
 package p2p
 
 import (
-	"bufio"
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
@@ -39,20 +39,14 @@ func Run(address, port string) {
 //リクエストを読み込む
 func readRequestMessage(conn net.Conn) []string {
 	messageSlice := []string{}
-	buff := make([]byte, 1024)
+	var buff bytes.Buffer
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
-	//forのなかでreaderを作ると2回目以降のループでreaderが再度初期化され何も残らなくなる
-	//https://stackoverrun.com/ja/q/12701223
-	reader := bufio.NewReader(conn)
 
-	_, err := reader.Read(buff)
+	//connからbuffに読み込む(内部で書き込みを行っている)
+	_, err := io.Copy(&buff, conn)
 	if err != nil {
-		if err == io.EOF {
-			log.Fatalf("コネクションが閉じられました。\n エラー：%s", err)
-		} else {
-			log.Fatalf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
-		}
+		log.Fatalf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
 	}
 
 	//elementsがリクエストの要素
@@ -60,7 +54,7 @@ func readRequestMessage(conn net.Conn) []string {
 	//elements[1] : method
 	//elements[2] : body
 	//elements[3] : sha256
-	elements := strings.Split(string(buff), ":")
+	elements := strings.Split(buff.String(), ":")
 
 	//改竄がないかハッシュ値の比較
 	fmt.Println(compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]))
@@ -68,11 +62,11 @@ func readRequestMessage(conn net.Conn) []string {
 	return messageSlice
 }
 
-func compareHash(requestStr, requestHash string) bool {
+func compareHash(requestBodyStr, requestHash string) bool {
 	//hash値の計算
-	sum := sha256.Sum256([]byte(requestStr))
+	sum := sha256.Sum256([]byte(requestBodyStr))
 
-	return hex.EncodeToString(sum[:]) == requestStr
+	return hex.EncodeToString(sum[:]) == requestHash
 }
 
 //相手ノードへのファイル検索の実行
