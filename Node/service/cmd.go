@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-//コマンドラインに案内画面を表示します。
+//コマンドラインに検索を表示します。
 func GetSearchingWords() []string {
 	searchingWords := []string{}
 	for {
