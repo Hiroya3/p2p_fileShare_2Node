@@ -65,9 +65,6 @@ func readRequestMessage(conn net.Conn) []string {
 }
 
 func compareHash(requestBodyStr, requestHash string) bool {
-
-	fmt.Printf("リクエストの文字列：%s\n", requestBodyStr)
-	fmt.Printf("ハッシュ値の値：%s\n", requestHash)
 	//hash値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
 
