@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"p2p_fileShare_2Node/Node/errorStatus"
 	"strings"
 	"time"
 )
@@ -31,14 +32,15 @@ func Run(address, port string) {
 		go func() {
 			defer conn.Close()
 			// リクエストを読み込む
-			messageSlice := readRequestMessage(conn)
+			messageSlice, err := readRequestMessage(conn)
 			fmt.Println(messageSlice)
+			fmt.Println(err)
 		}()
 	}
 }
 
 //リクエストを読み込む
-func readRequestMessage(conn net.Conn) []string {
+func readRequestMessage(conn net.Conn) ([]string, error) {
 	messageSlice := []string{}
 	var buff bytes.Buffer
 
@@ -60,9 +62,12 @@ func readRequestMessage(conn net.Conn) []string {
 	//改竄がないかハッシュ値の比較
 	if !compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]) {
 		//TODO:connectionに改竄されたことを書き込む
+		err := errorStatus.ReturnErrorCode300()
+		code, _ := err.(errorStatus.ErrorCode)
+		return nil, code
 	}
 
-	return messageSlice
+	return messageSlice, nil
 }
 
 func compareHash(requestBodyStr, requestHash string) bool {
