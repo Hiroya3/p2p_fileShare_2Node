@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+//Run Server
 func Run(address, port string) {
 	//listenの開始
 	listener, err := net.Listen("tcp", address+":"+port)
@@ -71,7 +72,7 @@ func compareHash(requestBodyStr, requestHash string) bool {
 	return hex.EncodeToString(sum[:]) == requestHash
 }
 
-//相手ノードへのファイル検索の実行
+//SearchFile forward to target Node
 func SearchFile(address, port string, searchingWords []string) {
 	connection, err := net.Dial("tcp", address+":"+port)
 
