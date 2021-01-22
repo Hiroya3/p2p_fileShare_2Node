@@ -33,6 +33,16 @@ func Run(address, port string) {
 			defer conn.Close()
 			// リクエストを読み込む
 			messageSlice, err := readRequestMessage(conn)
+			if err != nil {
+				//エラーコードに応じたハンドリング処理
+			}
+
+			if len(messageSlice) > 0 {
+				//messageがある時の処理
+			}
+
+			//ここにくる処理はエラーもmessageSliceもnilのもの＝ヘッダーが想定外のパケットであるため無視
+
 			fmt.Println(messageSlice)
 			fmt.Println(err)
 		}()
@@ -58,6 +68,11 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	//elements[2] : body
 	//elements[3] : sha256
 	elements := strings.Split(buff.String(), ":")
+
+	//ヘッダーが異なっているものは捨てる
+	if elements[0] != "001" {
+		return nil, nil
+	}
 
 	//改竄がないかハッシュ値の比較
 	if !compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]) {
