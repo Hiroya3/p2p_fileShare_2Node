@@ -95,7 +95,7 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 
 //ローカルファイルの検索結果をconnに書き込みます
 //検索ファイルの場合は001:searchedFiles:[ファイル名]:チェックサム（sha256）
-func writeSearchedFiles(conn net.Conn) {
+func writeSearchedFiles(conn net.Conn, searchedFiles []string) {
 
 }
 
@@ -125,19 +125,24 @@ func sendSearchWords(connection net.Conn, searchingWords []string) {
 		return
 	}
 
-	var messageBui strings.Builder
-
-	messageBui.WriteString("001:searchWords:")
-	messageBui.WriteString(strings.Join(searchingWords, ",") + ":")
-
-	requestBodyStr := messageBui.String()
-
-	//requestBodyStrのハッシュ値の計算
-	sum := sha256.Sum256([]byte(requestBodyStr))
-	requestStr := requestBodyStr + hex.EncodeToString(sum[:])
+	requestStr := createRequestStr("001", "searchWords", searchingWords)
 
 	_, err := connection.Write([]byte(requestStr))
 	if err != nil {
 		log.Printf("connectionへの書き込みに失敗しました。\nerr:%s", err)
 	}
+}
+
+//リクエストの作成
+func createRequestStr(headerNumStr, methodStr string, bodySlice []string) string {
+	var messageBui strings.Builder
+
+	messageBui.WriteString(headerNumStr + ":" + methodStr + ":")
+	messageBui.WriteString(strings.Join(bodySlice, ",") + ":")
+
+	requestBodyStr := messageBui.String()
+
+	//requestBodyStrのハッシュ値の計算
+	sum := sha256.Sum256([]byte(requestBodyStr))
+	return requestBodyStr + hex.EncodeToString(sum[:])
 }
