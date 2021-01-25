@@ -10,3 +10,7 @@ func TreadRequestMessage(conn net.Conn) ([]string, error) {
 func TcompareHash(requestBodyStr, requestHash string) bool {
 	return compareHash(requestBodyStr, requestHash)
 }
+
+func TcreateRequestStr(headerNumStr, methodStr string, bodySlice []string) string {
+	return createRequestStr(headerNumStr, methodStr, bodySlice)
+}
