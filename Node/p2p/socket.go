@@ -114,7 +114,6 @@ func SearchFile(address, port string, searchingWords []string) {
 		log.Printf("query error!!! error:%s", err)
 	}
 
-	defer connection.Close()
 	sendSearchWords(connection, searchingWords)
 }
 
