@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
+	"p2p_fileShare_2Node/Node/service"
 	"strings"
 	"time"
 )
@@ -45,20 +46,17 @@ func Run(address, port string) {
 			}
 
 			if len(messageSlice) > 0 {
-				//messageがある時の処理
+				//自分のノードの検索
+				service.SearchLocalFiles(messageSlice)
 			}
 
 			//ここにくる処理はエラーもmessageSliceもnilのもの＝ヘッダーが想定外のパケットであるため無視
-
-			fmt.Println(messageSlice)
-			fmt.Println(err)
 		}()
 	}
 }
 
 //リクエストを読み込む
 func readRequestMessage(conn net.Conn) ([]string, error) {
-	messageSlice := []string{}
 	var buff bytes.Buffer
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
@@ -87,6 +85,10 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 		err := errorStatus.ReturnErrorCode300()
 		return nil, err
 	}
+
+	//検索ワードの読み取り
+	//,が含まれない場合はelements[2]全体を1つのsliceの要素として返す
+	messageSlice := strings.Split(elements[2], ",")
 
 	return messageSlice, nil
 }
