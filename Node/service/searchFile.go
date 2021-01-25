@@ -16,7 +16,7 @@ func SearchLocalFiles(seachingWords []string) []string {
 	//info アクセスしているファイルの情報
 	err := filepath.Walk(targetPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			log.Println("%qへの検索の際にエラーが発生しました。エラー：%s", path, err)
+			log.Printf("%qへの検索の際にエラーが発生しました。エラー：%s", path, err)
 		}
 		if info.IsDir() {
 			return filepath.SkipDir
@@ -25,7 +25,7 @@ func SearchLocalFiles(seachingWords []string) []string {
 		return nil
 	})
 	if err != nil {
-		log.Fatalln("指定されたパスへの検索でエラーが発生しました。")
+		log.Println("指定されたパスへの検索でエラーが発生しました。")
 	}
 	return nil
 }

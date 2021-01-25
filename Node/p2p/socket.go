@@ -64,7 +64,7 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	//connからbuffに読み込む(内部で書き込みを行っている)
 	_, err := io.Copy(&buff, conn)
 	if err != nil {
-		log.Fatalf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
+		log.Printf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
 	}
 
 	//elementsがリクエストの要素
@@ -105,7 +105,7 @@ func SearchFile(address, port string, searchingWords []string) {
 	connection, err := net.Dial("tcp", address+":"+port)
 
 	if err != nil {
-		log.Fatalf("query error!!! error:%s", err)
+		log.Printf("query error!!! error:%s", err)
 	}
 
 	defer connection.Close()
@@ -116,7 +116,8 @@ func SearchFile(address, port string, searchingWords []string) {
 //検索の場合は001:searchWords:[キーワード]:チェックサム（sha256）
 func sendSearchWords(connection net.Conn, searchingWords []string) {
 	if len(searchingWords) == 0 {
-		log.Fatalln("キーワードを指定してください")
+		log.Println("キーワードを指定してください")
+		return
 	}
 
 	var messageBui strings.Builder
@@ -132,6 +133,6 @@ func sendSearchWords(connection net.Conn, searchingWords []string) {
 
 	_, err := connection.Write([]byte(requestStr))
 	if err != nil {
-		log.Fatalf("connectionへの書き込みに失敗しました。\nerr:%s", err)
+		log.Printf("connectionへの書き込みに失敗しました。\nerr:%s", err)
 	}
 }
