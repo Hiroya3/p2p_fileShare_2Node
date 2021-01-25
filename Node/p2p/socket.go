@@ -35,6 +35,13 @@ func Run(address, port string) {
 			messageSlice, err := readRequestMessage(conn)
 			if err != nil {
 				//エラーコードに応じたハンドリング処理
+				switch err {
+				case errorStatus.ErrCode300:
+					fmt.Println(err)
+					break
+				default:
+					fmt.Println(err)
+				}
 			}
 
 			if len(messageSlice) > 0 {
@@ -78,8 +85,7 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	if !compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]) {
 		//TODO:connectionに改竄されたことを書き込む
 		err := errorStatus.ReturnErrorCode300()
-		code, _ := err.(errorStatus.ErrorCode)
-		return nil, code
+		return nil, err
 	}
 
 	return messageSlice, nil
