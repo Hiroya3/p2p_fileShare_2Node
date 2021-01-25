@@ -16,6 +16,7 @@ type address struct {
 	TargetPort string `json:"targetPort"`
 }
 
+// Address is the DNS and Port info for ownNode and targetNode
 var Address address
 
 //ノードの情報の読み取り
@@ -23,13 +24,13 @@ func init() {
 	// nodeInfo/address.jsonから自ノードと相手ノードの情報を取得し、struct/address.goに格納
 	jsonFile, err := ioutil.ReadFile("../nodeInfo/address.json")
 	if err != nil {
-		log.Fatalln("address.jsonの読み取りに失敗しました。エラー：%s", err)
+		log.Fatalf("address.jsonの読み取りに失敗しました。エラー：%s", err)
 	}
 
 	err = json.Unmarshal(jsonFile, &Address)
 
 	if err != nil {
-		log.Fatalln("address.jsonの解析でエラーが発生しました。エラー：%s", err)
+		log.Fatalf("address.jsonの解析でエラーが発生しました。エラー：%s", err)
 	}
 }
 
