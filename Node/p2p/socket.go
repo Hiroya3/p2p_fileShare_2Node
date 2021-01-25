@@ -95,8 +95,12 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 
 //ローカルファイルの検索結果をconnに書き込みます
 //検索ファイルの場合は001:searchedFiles:[ファイル名]:チェックサム（sha256）
-func writeSearchedFiles(conn net.Conn, searchedFiles []string) {
-
+func writeSearchedFiles(connection net.Conn, searchedFilesSli []string) {
+	requestStr := createRequestStr("001", "searchedFiles", searchedFilesSli)
+	_, err := connection.Write([]byte(requestStr))
+	if err != nil {
+		log.Printf("connectionへの書き込みに失敗しました。\nerr:%s", err)
+	}
 }
 
 func compareHash(requestBodyStr, requestHash string) bool {
