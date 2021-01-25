@@ -47,7 +47,9 @@ func Run(address, port string) {
 
 			if len(messageSlice) > 0 {
 				//自分のノードの検索
-				fmt.Println(service.SearchLocalFiles(messageSlice))
+				searchiedFiles := service.SearchLocalFiles(messageSlice)
+				//connに書き込み検索元に戻す
+				writeSearchedFiles(conn, searchiedFiles)
 			}
 
 			//ここにくる処理はエラーもmessageSliceもnilのもの＝ヘッダーが想定外のパケットであるため無視
