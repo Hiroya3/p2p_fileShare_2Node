@@ -93,6 +93,12 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	return messageSlice, nil
 }
 
+//ローカルファイルの検索結果をconnに書き込みます
+//検索ファイルの場合は001:searchedFiles:[ファイル名]:チェックサム（sha256）
+func writeSearchedFiles(conn net.Conn) {
+
+}
+
 func compareHash(requestBodyStr, requestHash string) bool {
 	//hash値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
