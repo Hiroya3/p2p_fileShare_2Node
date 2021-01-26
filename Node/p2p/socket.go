@@ -92,6 +92,17 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	return messageSlice, nil
 }
 
+//connectionからの読み込みの実装
+func readFromConn(conn net.Conn) ([]byte, error) {
+	res := make([]byte, 4*1024)
+	n, err := conn.Read(res)
+	if err != nil {
+		log.Printf("コネクションからの読み込みに失敗しました。\nエラー：%s", err)
+		return nil, err
+	}
+	return res[:n], nil
+}
+
 //ローカルファイルの検索結果をconnに書き込みます
 //検索ファイルの場合は001:searchedFiles:[ファイル名]:チェックサム（sha256）
 func writeSearchedFiles(connection net.Conn, searchedFilesSli []string) {
@@ -155,15 +166,4 @@ func createRequestStr(headerNumStr, methodStr string, bodySlice []string) string
 	//requestBodyStrのハッシュ値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
 	return requestBodyStr + hex.EncodeToString(sum[:])
-}
-
-//connectionからの読み込みの実装
-func readFromConn(conn net.Conn) ([]byte, error) {
-	res := make([]byte, 4*1024)
-	n, err := conn.Read(res)
-	if err != nil {
-		log.Printf("コネクションからの読み込みに失敗しました。\nエラー：%s", err)
-		return nil, err
-	}
-	return res[:n], nil
 }
