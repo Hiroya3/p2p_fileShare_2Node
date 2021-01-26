@@ -49,6 +49,8 @@ func main() {
 	searchedFiles, err := p2p.SearchFile(Address.TargetDNS, Address.TargetPort, searchingWords)
 	if err != nil {
 		fmt.Println("検索に失敗しました。時間をおいて再度実行してみて下さい。")
+		log.Fatalln(err)
+
 	}
 	fmt.Println(service.SelectFileName(searchedFiles))
 	for {
