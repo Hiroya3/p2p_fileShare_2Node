@@ -1,11 +1,9 @@
 package p2p
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
@@ -30,8 +28,8 @@ func Run(address, port string) {
 		if err != nil {
 			log.Printf("listenerのacceptでエラーが発生しました。\nerr:%s\n", err)
 		}
+		defer conn.Close()
 		go func() {
-			defer conn.Close()
 			// リクエストを読み込む
 			messageSlice, err := readRequestMessage(conn)
 			if err != nil {
@@ -48,6 +46,7 @@ func Run(address, port string) {
 			if len(messageSlice) > 0 {
 				//自分のノードの検索
 				searchiedFiles := service.SearchLocalFiles(messageSlice)
+				fmt.Printf("これ%s\n", searchiedFiles)
 				//connに書き込み検索元に戻す
 				writeSearchedFiles(conn, searchiedFiles)
 			}
@@ -59,12 +58,10 @@ func Run(address, port string) {
 
 //リクエストを読み込む
 func readRequestMessage(conn net.Conn) ([]string, error) {
-	var buff bytes.Buffer
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
 
-	//connからbuffに読み込む(内部で書き込みを行っている)
-	_, err := io.Copy(&buff, conn)
+	res, err := readFromConn(conn)
 	if err != nil {
 		log.Printf("検索ワードのコネクション読み込みでエラーが発生しました。\nエラー:%s", err)
 	}
@@ -74,7 +71,7 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 	//elements[1] : method
 	//elements[2] : body
 	//elements[3] : sha256
-	elements := strings.Split(buff.String(), ":")
+	elements := strings.Split(string(res[:]), ":")
 
 	//ヘッダーが異なっているものは捨てる
 	if elements[0] != "001" {
@@ -98,6 +95,7 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 //ローカルファイルの検索結果をconnに書き込みます
 //検索ファイルの場合は001:searchedFiles:[ファイル名]:チェックサム（sha256）
 func writeSearchedFiles(connection net.Conn, searchedFilesSli []string) {
+	defer connection.Close()
 	requestStr := createRequestStr("001", "searchedFiles", searchedFilesSli)
 	_, err := connection.Write([]byte(requestStr))
 	if err != nil {
@@ -121,6 +119,12 @@ func SearchFile(address, port string, searchingWords []string) {
 	}
 
 	sendSearchWords(connection, searchingWords)
+	slice, err := readRequestMessage(connection)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println("検索されたファイル")
+	fmt.Println(slice)
 }
 
 //connetionに検索ワードを書き込む
@@ -151,4 +155,15 @@ func createRequestStr(headerNumStr, methodStr string, bodySlice []string) string
 	//requestBodyStrのハッシュ値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
 	return requestBodyStr + hex.EncodeToString(sum[:])
+}
+
+//connectionからの読み込みの実装
+func readFromConn(conn net.Conn) ([]byte, error) {
+	res := make([]byte, 4*1024)
+	n, err := conn.Read(res)
+	if err != nil {
+		log.Printf("コネクションからの読み込みに失敗しました。\nエラー：%s", err)
+		return nil, err
+	}
+	return res[:n], nil
 }
