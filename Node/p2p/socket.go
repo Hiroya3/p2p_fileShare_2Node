@@ -36,10 +36,10 @@ func Run(address, port string) {
 				//エラーコードに応じたハンドリング処理
 				switch err {
 				case errorStatus.ErrCode300:
-					fmt.Println(err)
+					log.Println(err)
 					break
 				default:
-					fmt.Println(err)
+					log.Println(err)
 				}
 			}
 
