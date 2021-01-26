@@ -56,7 +56,7 @@ func Run(address, port string) {
 	}
 }
 
-//リクエストを読み込む
+//connからプロトコル内のbodyを読み込む
 func readRequestMessage(conn net.Conn) ([]string, error) {
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
