@@ -3,7 +3,6 @@ package p2p
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
@@ -46,7 +45,6 @@ func Run(address, port string) {
 			if len(messageSlice) > 0 {
 				//自分のノードの検索
 				searchiedFiles := service.SearchLocalFiles(messageSlice)
-				fmt.Printf("これ%s\n", searchiedFiles)
 				//connに書き込み検索元に戻す
 				writeSearchedFiles(conn, searchiedFiles)
 			}
@@ -122,20 +120,21 @@ func compareHash(requestBodyStr, requestHash string) bool {
 }
 
 //SearchFile forward to target Node
-func SearchFile(address, port string, searchingWords []string) {
+func SearchFile(address, port string, searchingWords []string) ([]string, error) {
 	connection, err := net.Dial("tcp", address+":"+port)
 
 	if err != nil {
 		log.Printf("query error!!! error:%s", err)
+		return nil, err
 	}
 
 	sendSearchWords(connection, searchingWords)
 	slice, err := readRequestMessage(connection)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
-	fmt.Println("検索されたファイル")
-	fmt.Println(slice)
+	return slice, err
 }
 
 //connetionに検索ワードを書き込む

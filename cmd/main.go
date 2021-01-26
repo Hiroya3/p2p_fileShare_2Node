@@ -46,7 +46,11 @@ func main() {
 
 	searchingWords := service.GetSearchingWords()
 	fmt.Println("connに書き込みを行います")
-	p2p.SearchFile(Address.TargetDNS, Address.TargetPort, searchingWords)
+	searchedFiles, err := p2p.SearchFile(Address.TargetDNS, Address.TargetPort, searchingWords)
+	if err != nil {
+		fmt.Println("検索に失敗しました。時間をおいて再度実行してみて下さい。")
+	}
+	fmt.Println(service.SelectFileName(searchedFiles))
 	for {
 	}
 }
