@@ -159,6 +159,7 @@ func createRequestStr(headerNumStr, methodStr string, bodySlice []string) string
 	var messageBui strings.Builder
 
 	messageBui.WriteString(headerNumStr + ":" + methodStr + ":")
+	//bodySliceが1つしかない場合は","で結合されない
 	messageBui.WriteString(strings.Join(bodySlice, ",") + ":")
 
 	requestBodyStr := messageBui.String()
