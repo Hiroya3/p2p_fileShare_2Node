@@ -3,6 +3,7 @@ package p2p
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
@@ -30,7 +31,7 @@ func Run(address, port string) {
 		defer conn.Close()
 		go func() {
 			// リクエストを読み込む
-			messageSlice, err := readRequestMessage(conn)
+			method, messageSlice, err := readRequestMessage(conn)
 			if err != nil {
 				//エラーコードに応じたハンドリング処理
 				switch err {
@@ -43,10 +44,15 @@ func Run(address, port string) {
 			}
 
 			if len(messageSlice) > 0 {
-				//自分のノードの検索
-				searchiedFiles := service.SearchLocalFiles(messageSlice)
-				//connに書き込み検索元に戻す
-				writeSearchedFiles(conn, searchiedFiles)
+				switch method {
+				case "searchWords":
+					//自分のノードの検索
+					searchiedFiles := service.SearchLocalFiles(messageSlice)
+					//connに書き込み検索元に戻す
+					writeSearchedFiles(conn, searchiedFiles)
+				case "downloadFile":
+					fmt.Println(messageSlice)
+				}
 			}
 
 			//ここにくる処理はエラーもmessageSliceもnilのもの＝ヘッダーが想定外のパケットであるため無視
@@ -55,7 +61,7 @@ func Run(address, port string) {
 }
 
 //connからプロトコル内のbodyを読み込む
-func readRequestMessage(conn net.Conn) ([]string, error) {
+func readRequestMessage(conn net.Conn) (string, []string, error) {
 
 	conn.SetReadDeadline(time.Now().Add(100 * time.Second))
 
@@ -73,21 +79,21 @@ func readRequestMessage(conn net.Conn) ([]string, error) {
 
 	//ヘッダーが異なっているものは捨てる
 	if elements[0] != "001" {
-		return nil, nil
+		return "", nil, nil
 	}
 
 	//改竄がないかハッシュ値の比較
 	if !compareHash(elements[0]+":"+elements[1]+":"+elements[2]+":", elements[3]) {
 		//TODO:connectionに改竄されたことを書き込む
 		err := errorStatus.ReturnErrorCode300()
-		return nil, err
+		return "", nil, err
 	}
 
 	//検索ワードの読み取り
 	//,が含まれない場合はelements[2]全体を1つのsliceの要素として返す
 	messageSlice := strings.Split(elements[2], ",")
 
-	return messageSlice, nil
+	return elements[1], messageSlice, nil
 }
 
 //connectionからの読み込みの実装
@@ -129,7 +135,7 @@ func SearchFile(address, port string, searchingWords []string) ([]string, error)
 	}
 
 	sendSearchWords(connection, searchingWords)
-	slice, err := readRequestMessage(connection)
+	_, slice, err := readRequestMessage(connection)
 	if err != nil {
 		log.Println(err)
 		return nil, err

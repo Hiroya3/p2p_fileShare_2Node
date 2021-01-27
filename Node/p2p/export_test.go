@@ -3,7 +3,7 @@ package p2p
 import "net"
 
 func TreadRequestMessage(conn net.Conn) ([]string, error) {
-	messageSlice, err := readRequestMessage(conn)
+	_, messageSlice, err := readRequestMessage(conn)
 	return messageSlice, err
 }
 
