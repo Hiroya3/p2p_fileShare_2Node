@@ -15,8 +15,7 @@ func GetSearchingWords() []string {
 	searchingWords := []string{}
 	for {
 		fmt.Println("ファイルを検索します。キーワードをスペース区切りで3つまで指定してください。\n３つ以上指定した場合ははじめ３つが採用されます。")
-		//searchingWords = getSearchingWordsBySpace(os.Stdin)
-		searchingWords = []string{"w"}
+		searchingWords = getSearchingWordsBySpace(os.Stdin)
 
 		if len(searchingWords) > 3 {
 			fmt.Println("4つ以上指定されたため、はじめの３つを取得します。")
@@ -49,7 +48,7 @@ func getSearchingWordsBySpace(stdin io.Reader) []string {
 func SelectFileName(files []string) string {
 	//検索候補がない場合はlen(files):0 で files[0]:"" となる配列が返る
 	if files[0] == "" {
-		fmt.Println("候補がありませんでした。\n再度検索して下さい。")
+		fmt.Println("候補がありませんでした。\n時間をおいて再度検索して下さい。")
 		os.Exit(0)
 	}
 	sc := bufio.NewScanner(os.Stdin)
