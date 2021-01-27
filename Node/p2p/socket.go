@@ -3,7 +3,6 @@ package p2p
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
@@ -176,7 +175,13 @@ func DownloadFile(address, port, targetFileName string) (string, error) {
 		return "", err
 	}
 
-	fmt.Println(conn)
+	requestStr := createRequestStr("001", "downloadFile", []string{targetFileName})
+
+	_, err = conn.Write([]byte(requestStr))
+	if err != nil {
+		log.Println("downloadFileのコネクションの書き込みに失敗しました。")
+		return "", err
+	}
 
 	return "", nil
 }
