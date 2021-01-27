@@ -3,6 +3,7 @@ package p2p
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"log"
 	"net"
 	"p2p_fileShare_2Node/Node/errorStatus"
@@ -165,4 +166,16 @@ func createRequestStr(headerNumStr, methodStr string, bodySlice []string) string
 	//requestBodyStrのハッシュ値の計算
 	sum := sha256.Sum256([]byte(requestBodyStr))
 	return requestBodyStr + hex.EncodeToString(sum[:])
+}
+
+func DownloadFile(address, port, targetFileName string) (string, error) {
+	conn, err := net.Dial("tcp", address+":"+port)
+	if err != nil {
+		log.Printf("download query error! \n error : %s", err)
+		return "", err
+	}
+
+	fmt.Println(conn)
+
+	return "", nil
 }
