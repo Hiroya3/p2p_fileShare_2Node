@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"p2p_fileShare_2Node/Node/p2p"
-	"p2p_fileShare_2Node/Node/service"
+	"p2p_fileShare_2Node/node/p2p"
+	"p2p_fileShare_2Node/node/service"
 )
 
 type address struct {
