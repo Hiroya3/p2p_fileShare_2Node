@@ -11,6 +11,7 @@ WORKDIR ./cmd
 
 RUN go build -o p2pNode
 
+# /をつけることでrootから新たに作成できる（WORKDIRは相対パスで行くので/buildから分けるために/distとした）
 WORKDIR /dist
 
 #バイナリファイルをdistにコピー
