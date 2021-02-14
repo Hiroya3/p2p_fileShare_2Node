@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"p2p_fileShare_2Node/Node/service"
+	"p2p_fileShare_2Node/node/service"
 )
 
 func TestGetSearchingWordsBySpace(t *testing.T) {

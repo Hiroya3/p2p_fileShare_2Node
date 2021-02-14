@@ -1,7 +1,7 @@
 package p2p_test
 
 import (
-	"p2p_fileShare_2Node/Node/p2p"
+	"p2p_fileShare_2Node/node/p2p"
 	"testing"
 )
 

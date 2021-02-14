@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"p2p_fileShare_2Node/Node/errorStatus"
-	"p2p_fileShare_2Node/Node/service"
+	"p2p_fileShare_2Node/node/errorStatus"
+	"p2p_fileShare_2Node/node/service"
 	"strings"
 	"time"
 )
